@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hilfsangebote </title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 10px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    input {
+      width: 100%;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+    <body>
+  <img src="openstreetcode_01.jpg" alt="OpenStreetCode" style="width:100%;">
+  
+  <!-- Rest deiner Seite -->
+</body>
+
+  <h1>Hilfsangebote - Obdachlosenhilfe </h1>
+
+  <!-- Suche -->
+  <input 
+    type="text" 
+    id="search" 
+    placeholder="Suche nach Essen, Schlafplatz..."
+    onkeyup="filterList()"
+    autocomplete="off"
+  >
+
+  <!-- Neues Angebot -->
+  <form autocomplete="off" onsubmit="event.preventDefault(); addItem();">
+    <input 
+      type="text" 
+      id="name" 
+      placeholder="Name (z.B. Warme Mahlzeiten)"
+      autocomplete="off"
+    >
+
+    <input 
+      type="text" 
+      id="type" 
+      placeholder="Kategorie (z.B. Essen)"
+      autocomplete="off"
+    >
+
+    <button type="submit">Angebot hinzufügen</button>
+  </form>
+
+  <!-- Liste -->
+  <div id="list"></div>
+
+  <script>
+    let angebote = [
+      { name: "Warme Mahlzeiten", type: "Essen" },
+      { name: "Notunterkunft", type: "Schlafplatz" }
+    ];
+
+    function showList(data) {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      data.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "item";
+
+        const text = document.createElement("span");
+        text.textContent = item.name + " (" + item.type + ")";
+
+        const btn = document.createElement("button");
+        btn.textContent = "Löschen";
+        btn.className = "delete-btn";
+        btn.onclick = () => deleteItem(index);
+
+        div.appendChild(text);
+        div.appendChild(btn);
+        list.appendChild(div);
+      });
+    }
+
+    function addItem() {
+      const name = document.getElementById("name").value.trim();
+      const type = document.getElementById("type").value.trim();
+
+      if (name && type) {
+        angebote.push({ name, type });
+        showList(angebote);
+
+        document.getElementById("name").value = "";
+        document.getElementById("type").value = "";
+      }
+    }
+
+    function deleteItem(index) {
+      angebote.splice(index, 1);
+      showList(angebote);
+    }
+
+    function filterList() {
+      const input = document.getElementById("search").value.toLowerCase();
+
+      const filtered = angebote.filter(item =>
+        item.name.toLowerCase().includes(input) ||
+        item.type.toLowerCase().includes(input)
+      );
+
+      showList(filtered);
+    }
+
+    // Initial anzeigen
+    showList(angebote);
+  </script>
+
+</body>
+</html>
